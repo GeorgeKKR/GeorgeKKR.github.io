@@ -1,0 +1,56 @@
+@media only screen and (max-width: 991px) {
+    .s_c {
+        padding-top: 40px;
+    }
+}
+
+.page-enter {
+    transform: translateY(100%);
+}
+
+.page-enter-active {
+    transform: translateY(0%);
+    transition: all 400ms ease-out;
+}
+
+.page-exit {
+    transform: translateY(0%);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.page-exit-active {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    transform: translateY(-130%);
+    transition: all 400ms ease-out;
+}
+
+@media (min-width: 1400px) {
+    .container,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container-xl,
+    .container-xxl {
+        max-width: 100%;
+        overflow-x: hidden;
+        padding-right: 0;
+        padding-left: 0;
+        box-sizing: border-box;
+    }
+}
+
+.app-wrapper {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    box-sizing: border-box;
+}
