@@ -245,7 +245,7 @@ function CursorCore({
     // Cursor styles
     const styles = {
       cursorInner: {
-        zIndex: 999,
+        zIndex: 9999,
         display: 'block',
         position: 'fixed',
         borderRadius: '50%',
@@ -261,7 +261,7 @@ function CursorCore({
         ...(innerStyle && innerStyle)
       },
       cursorOuter: {
-        zIndex: 999,
+        zIndex: 9998,
         display: 'block',
         position: 'fixed',
         borderRadius: '50%',

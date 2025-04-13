@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
 import { dataportfolio, meta, portfolioCategories } from "../../content_option";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -66,13 +66,12 @@ export const Portfolio = () => {
   };
 
   return (
-    <HelmetProvider>
+    <>
+      <Helmet>
+        <title>Portfolio - George Kelly</title>
+        <meta name="description" content="Portfolio - George Kelly's Work" />
+      </Helmet>
       <Container className="portfolio-container">
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Portfolio | {meta.title}</title>
-          <meta name="description" content={meta.description} />
-        </Helmet>
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="12">
             <h1 className="section_title">Filmography</h1>
@@ -192,6 +191,6 @@ export const Portfolio = () => {
           </div>
         )}
       </Container>
-    </HelmetProvider>
+    </>
   );
 };

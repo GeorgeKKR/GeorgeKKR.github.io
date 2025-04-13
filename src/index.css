@@ -39,12 +39,12 @@ body {
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: var(--color-1);
-    color: var(--color-text);
+    background-color: #0b1628;
+    color: #ffffff;
     font-family: var(--font-base);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding-top: 60px;
+    padding-top: 0;
     font-weight: 400;
     letter-spacing: -0.015em;
     scrollbar-width: none; /* Hide scrollbar for Firefox */

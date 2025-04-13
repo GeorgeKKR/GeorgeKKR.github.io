@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import Typewriter from "typewriter-effect";
 import { introdata, meta, dataportfolio, dataabout } from "../../content_option";
 import { Link } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import AOS from 'aos';
+import { FaVideo, FaCamera, FaLightbulb, FaFilm, FaHeadphones, FaImage, FaTv, FaMicrophone } from 'react-icons/fa';
 
 export const Home = () => {
   const parallaxRef = useRef(null);
@@ -14,9 +15,125 @@ export const Home = () => {
   const profileImageRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
   
+  // Function to get icon positions based on screen width
+  const getResponsivePositions = () => {
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 992;
+    
+    return [
+      // Camera
+      { 
+        icon: FaCamera, 
+        style: { 
+          top: isMobile ? '10%' : '15%', 
+          left: isMobile ? '15%' : '10%', 
+          size: isMobile ? 45 : 60, 
+          opacity: 0.5, 
+          speed: 0.03 
+        } 
+      },
+      // Video
+      { 
+        icon: FaVideo, 
+        style: { 
+          top: isMobile ? '65%' : '75%', 
+          left: isMobile ? '20%' : '15%', 
+          size: isMobile ? 40 : 55, 
+          opacity: 0.45, 
+          speed: 0.05 
+        } 
+      },
+      // Light
+      { 
+        icon: FaLightbulb, 
+        style: { 
+          top: isMobile ? '30%' : '25%', 
+          left: isMobile ? '70%' : '80%', 
+          size: isMobile ? 38 : 50, 
+          opacity: 0.5, 
+          speed: 0.02 
+        } 
+      },
+      // Film
+      { 
+        icon: FaFilm, 
+        style: { 
+          top: isMobile ? '70%' : '60%', 
+          left: isMobile ? '65%' : '75%', 
+          size: isMobile ? 48 : 65, 
+          opacity: 0.5, 
+          speed: 0.04 
+        } 
+      },
+      // Headphones
+      { 
+        icon: FaHeadphones, 
+        style: { 
+          top: isMobile ? '50%' : '40%', 
+          left: isMobile ? '18%' : '25%', 
+          size: isMobile ? 40 : 52, 
+          opacity: 0.45, 
+          speed: 0.06 
+        } 
+      },
+      // Image
+      { 
+        icon: FaImage, 
+        style: { 
+          top: isMobile ? '85%' : '80%', 
+          left: isMobile ? '55%' : '60%', 
+          size: isMobile ? 42 : 56, 
+          opacity: 0.5, 
+          speed: 0.07 
+        } 
+      },
+      // TV
+      { 
+        icon: FaTv, 
+        style: { 
+          top: isMobile ? '15%' : '20%', 
+          left: isMobile ? '45%' : '40%', 
+          size: isMobile ? 44 : 58, 
+          opacity: 0.45, 
+          speed: 0.03 
+        } 
+      },
+      // Microphone
+      { 
+        icon: FaMicrophone, 
+        style: { 
+          top: isMobile ? '38%' : '70%', 
+          left: isMobile ? '75%' : '30%', 
+          size: isMobile ? 38 : 50, 
+          opacity: 0.5, 
+          speed: 0.05 
+        } 
+      },
+    ];
+  };
+  
+  // Film equipment icons for the animated background
+  const [filmEquipment, setFilmEquipment] = useState(getResponsivePositions());
+  
+  // Update positions on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setFilmEquipment(getResponsivePositions());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  // Create refs for each equipment icon
+  const equipmentRefs = useRef([]);
+  equipmentRefs.current = filmEquipment.map((_, i) => equipmentRefs.current[i] ?? React.createRef());
+  
   // Filter featured videos - specifying each video we want
   const featuredVideos = dataportfolio.filter(item => 
-    item.id === "zigzag" || item.id === "bisous" || item.id === "necklace"
+    item.id === "ready-set-startup" || item.id === "necklace" || item.id === "nimble-commercial"
   );
   
   console.log("Featured videos:", featuredVideos); // Debug log
@@ -52,6 +169,15 @@ export const Home = () => {
         profileImageRef.current.style.transform = `translateY(${scrollY * -0.15}px) rotate(${scrollY * 0.02}deg)`;
       }
       
+      // Apply parallax effect to each equipment icon
+      equipmentRefs.current.forEach((ref, index) => {
+        if (ref.current) {
+          const scrollY = window.scrollY;
+          const speed = filmEquipment[index].style.speed;
+          ref.current.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * speed * 2}deg)`;
+        }
+      });
+      
       // Show scroll button when user scrolls down a bit
       setShowScrollButton(window.scrollY > 300);
     };
@@ -62,6 +188,36 @@ export const Home = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  
+  // Add floating animation to equipment icons
+  useEffect(() => {
+    // Add a small delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      equipmentRefs.current.forEach((ref, index) => {
+        if (ref.current) {
+          const randomDuration = 8 + Math.random() * 8; // 8-16 seconds
+          const randomDelay = Math.random() * 2; // 0-2 seconds
+          ref.current.style.animation = `float ${randomDuration}s ease-in-out infinite ${randomDelay}s`;
+          
+          // Add a subtle pulse effect
+          ref.current.animate(
+            [
+              { opacity: filmEquipment[index].style.opacity * 0.8, transform: 'scale(0.95)' },
+              { opacity: filmEquipment[index].style.opacity, transform: 'scale(1.05)' },
+              { opacity: filmEquipment[index].style.opacity * 0.8, transform: 'scale(0.95)' },
+            ],
+            {
+              duration: 3000 + Math.random() * 2000,
+              iterations: Infinity,
+              easing: 'ease-in-out'
+            }
+          );
+        }
+      });
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Function to open video in the portfolio page
   const openVideoInPortfolio = (videoId) => {
@@ -70,11 +226,10 @@ export const Home = () => {
   };
   
   return (
-    <HelmetProvider>
+    <>
       <Helmet>
-        <meta charSet="utf-8" />
-        <title>{meta.title}</title>
-        <meta name="description" content={meta.description} />
+        <title>George Kelly - Filmmaker & Videographer</title>
+        <meta name="description" content="Home - George Kelly Portfolio" />
       </Helmet>
       
       {/* Hero Section - Full viewport height */}
@@ -102,15 +257,41 @@ export const Home = () => {
               animation: 'gradientAnimation 15s ease infinite'
             }}
           ></div>
+          
+          {/* Animated Film Equipment Icons */}
+          {filmEquipment.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={index}
+                ref={equipmentRefs.current[index]}
+                className="film-equipment-icon"
+                style={{
+                  position: 'absolute',
+                  top: item.style.top,
+                  left: item.style.left,
+                  zIndex: 5,
+                  opacity: item.style.opacity,
+                  transition: 'transform 0.5s ease-out',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  filter: 'drop-shadow(0 0 20px rgba(130, 200, 255, 0.8))',
+                  pointerEvents: 'none'
+                }}
+              >
+                <Icon size={item.style.size} />
+              </div>
+            );
+          })}
+          
           <div className="overlay" style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
             height: '100%',
-            background: 'radial-gradient(circle at center, rgba(11, 22, 40, 0.4), rgba(11, 22, 40, 0.7))',
-            backdropFilter: 'blur(8px)',
-            zIndex: 1
+            background: 'radial-gradient(circle at center, rgba(11, 22, 40, 0.3), rgba(11, 22, 40, 0.5))',
+            backdropFilter: 'blur(5px)',
+            zIndex: 3
           }}></div>
         </div>
         
@@ -185,7 +366,7 @@ export const Home = () => {
         width: '100%',
         backgroundColor: 'var(--color-2)',
         position: 'relative',
-        padding: '120px 0 150px',
+        padding: window.innerWidth < 768 ? '80px 0 100px' : '120px 0 150px',
         borderTop: '2px solid rgba(255, 255, 255, 0.15)',
         boxShadow: '0 -25px 50px rgba(0, 0, 0, 0.5)'
       }}>
@@ -193,26 +374,27 @@ export const Home = () => {
           <Row className="mb-5">
             <Col lg={12} className="text-center">
               <h2 style={{ 
-                fontSize: '3.5rem', 
-                marginBottom: '30px', 
+                fontSize: window.innerWidth < 768 ? '2.5rem' : '3.5rem', 
+                marginBottom: window.innerWidth < 768 ? '20px' : '30px', 
                 color: 'white',
                 fontWeight: '700'
               }}>Featured Videos</h2>
               <p style={{ 
                 color: 'rgba(255, 255, 255, 0.8)', 
-                fontSize: '1.2rem',
+                fontSize: window.innerWidth < 768 ? '1rem' : '1.2rem',
                 maxWidth: '800px',
                 margin: '0 auto 60px',
-                lineHeight: '1.7'
+                lineHeight: '1.7',
+                padding: window.innerWidth < 768 ? '0 15px' : '0'
               }}>
                 A selection of my best work in filmmaking and video production. Click on any video to watch it in full screen with details.
               </p>
             </Col>
           </Row>
           
-          <Row>
+          <Row className={window.innerWidth < 576 ? 'g-4' : 'g-4'}>
             {featuredVideos.map((video, index) => (
-              <Col md={4} key={video.id} className="mb-4">
+              <Col md={4} sm={6} xs={12} key={video.id} className="mb-4">
                 <div 
                   style={{
                     borderRadius: '12px',
@@ -250,8 +432,8 @@ export const Home = () => {
                       top: '50%',
                       left: '50%',
                       transform: 'translate(-50%, -50%)',
-                      width: '60px',
-                      height: '60px',
+                      width: window.innerWidth < 576 ? '50px' : '60px',
+                      height: window.innerWidth < 576 ? '50px' : '60px',
                       backgroundColor: 'rgba(255, 255, 255, 0.2)',
                       borderRadius: '50%',
                       display: 'flex',
@@ -344,6 +526,6 @@ export const Home = () => {
           </Row>
         </Container>
       </div>
-    </HelmetProvider>
+    </>
   );
 };

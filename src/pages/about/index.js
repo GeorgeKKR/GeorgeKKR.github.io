@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./style.css";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import { Container, Row, Col, Modal } from "react-bootstrap";
 import { FaCamera, FaFilm, FaLaptop, FaGraduationCap, FaQuoteLeft, FaBriefcase, FaClock, FaUsers, FaTimes } from "react-icons/fa";
 import {
@@ -9,7 +9,6 @@ import {
   worktimeline,
   skills,
   services,
-  professionalImages,
   education,
 } from "../../content_option";
 
@@ -21,7 +20,6 @@ export const About = () => {
     skills: true,
     education: true,
     philosophy: true,
-    camera: true,
     services: true
   });
   
@@ -33,7 +31,6 @@ export const About = () => {
   const skillsRef = useRef(null);
   const educationRef = useRef(null);
   const philosophyRef = useRef(null);
-  const cameraRef = useRef(null);
   const servicesRef = useRef(null);
 
   const handleImageClick = (image) => {
@@ -58,10 +55,7 @@ export const About = () => {
   // Image preloading function
   const preloadImages = () => {
     const imageUrls = [
-      dataabout.profile_img,
-      dataabout.camera_work_img1,
-      dataabout.camera_work_img2,
-      ...(professionalImages?.images?.map(img => img.img) || [])
+      dataabout.profile_img
     ];
     
     let loadedCount = 0;
@@ -114,9 +108,6 @@ export const About = () => {
     if (philosophyRef.current && isInViewport(philosophyRef.current)) {
       setVisibleSections(prev => ({ ...prev, philosophy: true }));
     }
-    if (cameraRef.current && isInViewport(cameraRef.current)) {
-      setVisibleSections(prev => ({ ...prev, camera: true }));
-    }
     if (servicesRef.current && isInViewport(servicesRef.current)) {
       setVisibleSections(prev => ({ ...prev, services: true }));
     }
@@ -141,7 +132,6 @@ export const About = () => {
         skills: true,
         education: true,
         philosophy: true,
-        camera: true,
         services: true
       });
     }, 1000);
@@ -153,14 +143,12 @@ export const About = () => {
   }, []);
 
   return (
-    <HelmetProvider>
+    <>
+      <Helmet>
+        <title>About - George Kelly</title>
+        <meta name="description" content="About George Kelly - Filmmaker & Videographer" />
+      </Helmet>
       <Container className="about-container">
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>About | {meta.title}</title>
-          <meta name="description" content={meta.description} />
-        </Helmet>
-        
         {/* Hero Section */}
         <div className={`about-hero ${isLoaded ? 'fade-in' : ''}`}>
           <Row className="align-items-center">
@@ -319,51 +307,6 @@ export const About = () => {
           </Row>
         </div>
         
-        {/* Behind the Camera Section */}
-        <div 
-          ref={cameraRef}
-          className={`camera-work-section section-spacing ${visibleSections.camera ? 'fade-in' : ''}`}
-        >
-          <Row>
-            <Col lg={12} className="text-center mb-5">
-              <h2 className="section-title">{professionalImages.title}</h2>
-              <div className="section-divider mx-auto"></div>
-              <p className="lead text-center mb-5">{professionalImages.description}</p>
-            </Col>
-          </Row>
-          
-          <Row>
-            <Col lg={12}>
-              <div className="camera-work-grid">
-                {professionalImages.images.map((image, index) => (
-                  <div 
-                    key={index} 
-                    className={`camera-work-card ${visibleSections.camera ? 'fade-in-item' : ''}`}
-                    style={{ transitionDelay: `${index * 0.2}s` }}
-                  >
-                    <div className="card-image">
-                      <img 
-                        src={image.img} 
-                        alt={image.title} 
-                        onClick={() => handleImageClick(image)}
-                        className="clickable-image"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "https://via.placeholder.com/400x300?text=Camera+Work";
-                        }}
-                      />
-                      <div className="card-overlay">
-                        <h4>{image.title}</h4>
-                        <p>{image.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Col>
-          </Row>
-        </div>
-        
         {/* Key Strengths Section */}
         <div className="services-section section-spacing fade-in">
           <Row>
@@ -453,6 +396,6 @@ export const About = () => {
           )}
         </Modal.Body>
       </Modal>
-    </HelmetProvider>
+    </>
   );
 };

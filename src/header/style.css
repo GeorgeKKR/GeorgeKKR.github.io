@@ -5,25 +5,18 @@
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 1000;
-    background: rgba(11, 22, 40, 0);
-    background: linear-gradient(to bottom, 
-        rgba(11, 22, 40, 0.85) 0%, 
-        rgba(11, 22, 40, 0.6) 60%, 
-        rgba(11, 22, 40, 0.2) 85%, 
-        rgba(11, 22, 40, 0) 100%);
+    z-index: 1001;
+    background-color: rgba(11, 22, 40, 0.7);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
     padding: 20px 0;
-    border-bottom: none; /* Removing the harsh line */
+    border-bottom: none;
+    display: none;
 }
 
 .navbar-scrolled {
-    background: linear-gradient(to bottom, 
-        rgba(11, 22, 40, 0.95) 0%, 
-        rgba(11, 22, 40, 0.85) 80%, 
-        rgba(11, 22, 40, 0.6) 100%);
+    background-color: rgba(11, 22, 40, 0.85);
     padding: 15px 0;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
 }
@@ -41,7 +34,7 @@
     text-decoration: none;
     display: flex;
     align-items: center;
-    margin-top: -5px; /* Slight vertical adjustment */
+    margin-top: -5px;
 }
 
 .logo-text {
@@ -49,12 +42,11 @@
     font-weight: 700;
     color: white;
     letter-spacing: -0.02em;
+    transition: all 0.3s ease;
     background: linear-gradient(90deg, #fff, var(--color-5));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    transition: all 0.3s ease;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-scrolled .logo-text {
@@ -74,7 +66,8 @@
     transition: all 0.3s ease;
     outline: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    margin-right: -10px; /* Adjust horizontal position */
+    margin-right: 0;
+    z-index: 1002;
 }
 
 .menu__button:hover {
@@ -94,6 +87,80 @@
     color: white;
 }
 
+/* Corner Hamburger Menu Button */
+.corner-menu__button {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+    background: rgba(30, 135, 229, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    z-index: 1002;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.corner-menu__button:hover {
+    background: rgba(30, 135, 229, 0.25);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(30, 135, 229, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.corner-menu__button:active {
+    transform: translateY(0) scale(0.95);
+}
+
+.corner-menu__button svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.corner-menu__button:hover svg {
+    transform: rotate(90deg);
+    color: #ffffff;
+}
+
+.corner-menu__button .close-icon {
+    color: white;
+    transform: rotate(0deg);
+}
+
+.corner-menu__button:hover .close-icon {
+    transform: rotate(-90deg);
+}
+
+/* Menu header inside the navigation */
+.menu-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.menu-header .logo-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, #fff, var(--color-5));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+}
+
 /* Navigation Menu */
 .site__navigation {
     position: fixed;
@@ -105,7 +172,7 @@
     visibility: hidden;
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-    z-index: 999;
+    z-index: 1000;
 }
 
 .menu__opened {
@@ -119,7 +186,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(11, 22, 40, 0.98), rgba(35, 52, 67, 0.95));
+    background-color: rgba(11, 22, 40, 0.95);
     transform: translateY(-100%);
     transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     display: flex;
@@ -194,7 +261,7 @@
     left: 50%;
     width: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--color-5), #3a8bd8);
+    background: var(--color-5);
     transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 3px;
@@ -245,7 +312,7 @@
 }
 
 .social__links a:hover {
-    background: linear-gradient(135deg, var(--color-5), #3a8bd8);
+    background: var(--color-5);
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(30, 135, 229, 0.3);
 }
@@ -260,7 +327,8 @@
 /* Media Queries */
 @media (max-width: 992px) {
     .nav-container {
-        padding: 0 30px;
+        padding: 0 20px;
+        width: 100%;
     }
     
     .logo-text {
@@ -274,15 +342,32 @@
     .menu_item a {
         font-size: 2.8rem;
     }
+    
+    .menu-header .logo-text {
+        font-size: 2.2rem;
+    }
+    
+    .corner-menu__button {
+        width: 45px;
+        height: 45px;
+        top: 20px;
+        right: 25px;
+    }
 }
 
+/* Specific fixes for mobile devices */
 @media (max-width: 768px) {
     .site__header {
         padding: 18px 0;
+        background-color: rgba(11, 22, 40, 0.7);
+    }
+    
+    .navbar-scrolled {
+        background-color: rgba(11, 22, 40, 0.85);
     }
     
     .nav-container {
-        padding: 0 25px;
+        padding: 0 15px;
     }
     
     .menu_item {
@@ -302,28 +387,43 @@
         height: 44px;
         font-size: 20px;
     }
+    
+    .corner-menu__button {
+        width: 42px;
+        height: 42px;
+        top: 18px;
+        right: 20px;
+    }
+    
+    .corner-menu__button svg {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .menu-header .logo-text {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 576px) {
     .site__header {
         padding: 15px 0;
+        background-color: rgba(11, 22, 40, 0.7);
     }
     
     .nav-container {
-        padding: 0 20px;
+        padding: 0 15px;
+        justify-content: space-between;
     }
     
     .logo-text {
         font-size: 1.6rem;
     }
     
-    .navbar-scrolled .logo-text {
-        font-size: 1.5rem;
-    }
-    
     .menu__button {
         width: 45px;
         height: 45px;
+        margin-right: 0;
     }
     
     .menu__button svg {
@@ -351,5 +451,21 @@
     
     .menu__footer {
         padding: 25px 20px;
+    }
+    
+    .corner-menu__button {
+        width: 40px;
+        height: 40px;
+        top: 15px;
+        right: 15px;
+    }
+    
+    .corner-menu__button svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .menu-header .logo-text {
+        font-size: 1.8rem;
     }
 }

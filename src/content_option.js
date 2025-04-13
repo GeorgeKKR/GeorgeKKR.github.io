@@ -5,7 +5,7 @@ const meta = {
 };
 
 const introdata = {
-    title: "I'm George Kelly",
+    title: "George Kelly",
     animated: {
         first: "Film Producer",
         second: "Creative Director",
@@ -100,6 +100,24 @@ const services = [{
 
 const dataportfolio = [
     {
+        img: "https://i.ytimg.com/vi/FI2K2rkOWQM/maxresdefault.jpg",
+        description: "Official trailer for Season 1 of Ready Set StartUP UK where I served as assistant director",
+        link: "https://www.youtube.com/watch?v=FI2K2rkOWQM",
+        category: "directed",
+        title: "Ready Set StartUP UK - Season 1 Trailer",
+        featured: true,
+        id: "ready-set-startup"
+    },
+    {
+        img: "https://i.ytimg.com/vi/Ny5jE-MvLlI/maxresdefault.jpg",
+        description: "Commercial video for Nimble showcasing their products designed to make cleaning easier for parents",
+        link: "https://www.youtube.com/watch?v=Ny5jE-MvLlI",
+        category: "produced",
+        title: "Nimble - Cleaning Made Simple",
+        featured: true,
+        id: "nimble-commercial"
+    },
+    {
         img: "https://i.ytimg.com/vi/SsoEa68Y9qo/maxresdefault.jpg",
         description: "Music video for Maximilli3n's track ZIGZAG featuring dynamic visuals and creative direction",
         link: "https://www.youtube.com/watch?v=SsoEa68Y9qo",
@@ -177,11 +195,10 @@ const portfolioCategories = [
 
 const contactConfig = {
     YOUR_EMAIL: "Georgekelly00@icloud.com",
-    YOUR_FONE: "+44 7787 481141",
     description: "Interested in collaborating on a project or have questions about my work? Feel free to reach out. I'm always open to discussing new creative opportunities.",
-    YOUR_SERVICE_ID: "service_id",
-    YOUR_TEMPLATE_ID: "template_id",
-    YOUR_USER_ID: "user_id",
+    YOUR_SERVICE_ID: "service_wnxzyoi",
+    YOUR_TEMPLATE_ID: "template_paft5r8",
+    YOUR_USER_ID: "SYxCBvOHFeAdfu_L_",
 };
 
 const socialprofils = {
