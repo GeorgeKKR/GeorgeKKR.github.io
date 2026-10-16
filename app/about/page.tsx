@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
+import { TransitionLink as Link } from '@/components/motion/transition-link'
+import { SplitText } from '@/components/motion/split-text'
 import { bio, education, jobs, onSetPhotos, philosophy, portrait, skills } from '@/lib/content'
 
 export const metadata: Metadata = {
@@ -13,7 +14,11 @@ export default function AboutPage() {
       <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            <div className="relative aspect-[3/4] max-w-sm overflow-hidden bg-booth">
+            <div
+              data-reveal="shutter"
+              style={{ ['--delay' as string]: '250ms' }}
+              className="relative aspect-[3/4] max-w-sm overflow-hidden bg-booth"
+            >
               <Image
                 src={portrait.src}
                 alt={portrait.alt}
@@ -27,13 +32,22 @@ export default function AboutPage() {
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6">
-          <h1 className="title-card text-[clamp(4.5rem,14vw,12rem)]">About</h1>
-          <div className="mt-10 max-w-measure space-y-5 text-lg text-screen/85">
+          <h1 data-reveal="rise" className="title-card text-[clamp(4.5rem,14vw,12rem)]">
+            <SplitText text="About" delay={200} />
+          </h1>
+          <div
+            data-reveal="fade"
+            style={{ ['--delay' as string]: '500ms' }}
+            className="mt-10 max-w-measure space-y-5 text-lg text-screen/85"
+          >
             {bio.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <blockquote className="mt-12 max-w-measure border-l border-screen/40 pl-6 font-display text-[1.75rem] font-medium leading-tight">
+          <blockquote
+            data-reveal="fade"
+            className="mt-12 max-w-measure border-l border-screen/40 pl-6 font-display text-[1.75rem] font-medium leading-tight"
+          >
             {philosophy}
           </blockquote>
 
@@ -61,7 +75,7 @@ export default function AboutPage() {
             ))}
           </CvList>
 
-          <section aria-labelledby="skills-heading" className="mt-20">
+          <section aria-labelledby="skills-heading" data-reveal="fade" className="mt-20">
             <h2 id="skills-heading" className="border-b border-line pb-3 text-lg font-semibold">
               Skills and languages
             </h2>
@@ -73,9 +87,13 @@ export default function AboutPage() {
           </section>
 
           <div className="mt-20 grid grid-cols-2 gap-3 sm:gap-6">
-            {onSetPhotos.map((photo) => (
+            {onSetPhotos.map((photo, index) => (
               <figure key={photo.src}>
-                <div className="relative aspect-[3/4] overflow-hidden bg-booth">
+                <div
+                  data-reveal="shutter"
+                  style={{ ['--delay' as string]: `${index * 200}ms` }}
+                  className="relative aspect-[3/4] overflow-hidden bg-booth"
+                >
                   <Image
                     src={photo.src}
                     alt={photo.alt}
@@ -105,8 +123,13 @@ function CvList({ title, children }: { title: string; children: React.ReactNode 
   const id = `${title.toLowerCase()}-heading`
   return (
     <section aria-labelledby={id} className="mt-20">
-      <h2 id={id} className="border-b border-line pb-3 text-lg font-semibold">
+      <h2 id={id} className="relative pb-3 text-lg font-semibold">
         {title}
+        <span
+          aria-hidden="true"
+          data-reveal="wipe"
+          className="absolute inset-x-0 bottom-0 h-px bg-line"
+        />
       </h2>
       <ol>{children}</ol>
     </section>
@@ -125,7 +148,10 @@ function CvRow({
   text: string
 }) {
   return (
-    <li className="grid gap-x-8 gap-y-1 border-b border-line py-6 sm:grid-cols-[8rem_1fr]">
+    <li
+      data-reveal="fade"
+      className="grid gap-x-8 gap-y-1 border-b border-line py-6 sm:grid-cols-[8rem_1fr]"
+    >
       <span className="tabular-nums text-mute">{period}</span>
       <div>
         <h3 className="title-card text-3xl sm:text-4xl">{heading}</h3>

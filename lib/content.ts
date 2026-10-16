@@ -234,8 +234,7 @@ export const jobs: Job[] = [
     company: 'Pictures in Motion',
     location: 'London, UK',
     period: '2020–2021',
-    description:
-      'Helped with camera setup and rigging, and conducted master interviews on set.',
+    description: 'Helped with camera setup and rigging, and conducted master interviews on set.',
   },
   {
     role: 'Film Intern',
@@ -316,6 +315,9 @@ export function getCredits(): { role: string; names: string[] }[] {
     ),
   }))
   const jobCredits = jobs.map((job) => ({ role: job.role, names: [job.company] }))
-  const studyCredits = education.map((ed) => ({ role: ed.degree, names: [ed.creditName ?? ed.institution] }))
+  const studyCredits = education.map((ed) => ({
+    role: ed.degree,
+    names: [ed.creditName ?? ed.institution],
+  }))
   return [...filmCredits, ...jobCredits, ...studyCredits]
 }

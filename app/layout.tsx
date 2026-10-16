@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Sofia_Sans, Sofia_Sans_Extra_Condensed } from 'next/font/google'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { MotionProvider } from '@/components/motion/motion-provider'
 import { meta } from '@/lib/content'
 import './globals.css'
 
@@ -65,13 +66,24 @@ export const viewport: Viewport = {
   themeColor: '#000000',
 }
 
+// Motion is opt-in: hidden "before" states only exist once this class is set
+const enableMotionScript = `if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')`
+
 // ============================================================================
 // ROOT LAYOUT
 // ============================================================================
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${sofiaSans.variable} ${sofiaCondensed.variable}`}>
+    // The inline script adds a class to <html> before paint, so suppress the mismatch
+    <html
+      lang="en-GB"
+      className={`${sofiaSans.variable} ${sofiaCondensed.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: enableMotionScript }} />
+      </head>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content
@@ -79,6 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main-content">{children}</main>
         <Footer />
+        <MotionProvider />
       </body>
     </html>
   )

@@ -19,8 +19,12 @@ export function VideoModal({ film, onClose }: VideoModalProps) {
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
-    if (film && !dialog.open) dialog.showModal()
+    if (film && !dialog.open) {
+      dialog.showModal()
+      window.__lenis?.stop()
+    }
     if (!film && dialog.open) dialog.close()
+    if (!film) window.__lenis?.start()
   }, [film])
 
   return (
@@ -33,7 +37,7 @@ export function VideoModal({ film, onClose }: VideoModalProps) {
     >
       {film && (
         <div className="bg-ink">
-          <div className="flex items-start justify-between gap-6 pb-4">
+          <div className="dialog-meta flex items-start justify-between gap-6 pb-4">
             <div>
               <h2 className="title-card text-4xl sm:text-5xl">{film.title}</h2>
               <p className="mt-2 text-mute">
@@ -49,7 +53,7 @@ export function VideoModal({ film, onClose }: VideoModalProps) {
               Close
             </button>
           </div>
-          <div className="relative aspect-video w-full bg-booth">
+          <div className="letterbox relative aspect-video w-full bg-booth">
             <iframe
               src={getYouTubeEmbedUrl(film.videoUrl, true) ?? undefined}
               className="absolute inset-0 h-full w-full"

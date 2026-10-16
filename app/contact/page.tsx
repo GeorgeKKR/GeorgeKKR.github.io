@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm, type UseFormRegisterReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { SplitText } from '@/components/motion/split-text'
 import { contactConfig } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
@@ -12,11 +13,7 @@ import { cn } from '@/lib/utils'
 // ============================================================================
 
 const contactFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, 'Enter your name')
-    .max(100, 'Name must be under 100 characters'),
+  name: z.string().trim().min(2, 'Enter your name').max(100, 'Name must be under 100 characters'),
   email: z
     .string()
     .trim()
@@ -39,10 +36,22 @@ type ContactFormData = z.infer<typeof contactFormSchema>
 export default function ContactPage() {
   return (
     <div className="frame pb-24 pt-28 sm:pb-32 sm:pt-36">
-      <h1 className="title-card text-[clamp(4.5rem,14vw,12rem)]">Contact</h1>
+      <h1 data-reveal="rise" className="title-card text-[clamp(4.5rem,14vw,12rem)]">
+        <SplitText text="Contact" delay={200} />
+      </h1>
 
-      <div className="mt-12 grid gap-16 border-t border-line pt-12 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-5">
+      <div className="relative mt-12 grid gap-16 pt-12 lg:grid-cols-12 lg:gap-12">
+        <span
+          aria-hidden="true"
+          data-reveal="wipe"
+          style={{ ['--delay' as string]: '300ms' }}
+          className="absolute inset-x-0 top-0 h-px bg-line"
+        />
+        <div
+          data-reveal="fade"
+          style={{ ['--delay' as string]: '450ms' }}
+          className="lg:col-span-5"
+        >
           <p className="max-w-measure text-2xl font-medium leading-snug">
             Tell me about your project: what it is, when it shoots and what you need from me.
           </p>
@@ -56,7 +65,11 @@ export default function ContactPage() {
           <p className="mt-10 text-mute">Based in London, UK</p>
         </div>
 
-        <div className="lg:col-span-6 lg:col-start-7">
+        <div
+          data-reveal="fade"
+          style={{ ['--delay' as string]: '600ms' }}
+          className="lg:col-span-6 lg:col-start-7"
+        >
           <ContactForm />
         </div>
       </div>
@@ -131,7 +144,11 @@ function ContactForm() {
       </Field>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
-        <button type="submit" disabled={isSubmitting} className="button button-solid disabled:opacity-60">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="button button-solid disabled:opacity-60"
+        >
           {isSubmitting ? 'Sending…' : 'Send message'}
         </button>
         <p role="status" aria-live="polite" className="text-screen/85">
@@ -153,8 +170,8 @@ function ContactForm() {
 
 function fieldClass(error?: string) {
   return cn(
-    'w-full border-0 border-b bg-transparent px-0 py-3 text-lg text-screen outline-none transition-colors',
-    'focus:border-screen focus-visible:outline-none',
+    'peer block w-full border-0 border-b bg-transparent px-0 py-3 text-lg text-screen outline-none transition-colors',
+    'focus-visible:outline-none',
     error ? 'border-[#FF8A80]' : 'border-line hover:border-mute'
   )
 }
@@ -184,7 +201,13 @@ function Field({
       <label htmlFor={id} className="block text-mute">
         {label}
       </label>
-      {children}
+      <div className="relative">
+        {children}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-screen transition-transform duration-500 ease-cut peer-focus:scale-x-100"
+        />
+      </div>
       {error && (
         <p id={`${id}-error`} className="mt-2 text-sm text-[#FF8A80]">
           {error}
