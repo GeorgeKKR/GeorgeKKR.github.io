@@ -1,11 +1,11 @@
 {
-  "name": "George Kelly - Film Producer & Creative Director",
+  "name": "George Kelly - Producer, Director & Camera Operator",
   "short_name": "George Kelly",
-  "description": "Award-winning film producer and creative director specializing in feature films, documentaries, and commercials.",
+  "description": "Producer, director and camera operator based in London.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b1628",
-  "theme_color": "#0b1628",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {

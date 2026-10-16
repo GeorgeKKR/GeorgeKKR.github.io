@@ -1,208 +1,82 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Play, ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardImage, CardTitle } from '@/components/ui/card'
-import { Section, SectionHeader, SectionTitle, SectionSubtitle } from '@/components/ui/section'
+import { useState } from 'react'
+import Image from 'next/image'
 import { VideoModal } from '@/components/ui/video-modal'
-import { PageWrapper } from '@/components/layout/page-transition'
-import {
-  portfolioItems,
-  portfolioCategories,
-  getWorkByCategory,
-  type PortfolioItem,
-} from '@/lib/content'
-import { staggerContainer, staggerItem } from '@/lib/animations'
+import { films, getFilmRoles, type Film } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
-// ============================================================================
-// WORK PAGE
-// ============================================================================
+const ALL = 'All'
 
 export default function WorkPage() {
-  const [activeCategory, setActiveCategory] = useState('all')
-  const [selectedWork, setSelectedWork] = useState<PortfolioItem | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const filteredWork = getWorkByCategory(activeCategory)
-  const totalProjects = portfolioItems.length
-  const uniqueYears = Array.from(new Set(portfolioItems.map((item) => Number(item.year))))
-  const minYear = uniqueYears.length ? Math.min(...uniqueYears) : null
-  const maxYear = uniqueYears.length ? Math.max(...uniqueYears) : null
-  const projectMetrics = [
-    { label: 'Projects Produced', value: `${totalProjects}+` },
-    { label: 'Categories', value: `${portfolioCategories.length - 1}` },
-    {
-      label: 'Release Span',
-      value: minYear && maxYear ? `${minYear}–${maxYear}` : '—',
-    },
-  ]
-
-  const openModal = (item: PortfolioItem) => {
-    setSelectedWork(item)
-    setIsModalOpen(true)
-    document.body.style.overflow = 'hidden'
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-    document.body.style.overflow = 'unset'
-    // Delay clearing selected work to allow exit animation
-    setTimeout(() => setSelectedWork(null), 300)
-  }
+  const [role, setRole] = useState(ALL)
+  const [playing, setPlaying] = useState<Film | null>(null)
+  const roles = [ALL, ...getFilmRoles()]
+  const visible = role === ALL ? films : films.filter((film) => film.role === role)
 
   return (
-    <>
-      <PageWrapper>
-        <Section spacing="sm">
-          <SectionHeader centered>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <SectionTitle gradient>My Work</SectionTitle>
-              <SectionSubtitle className="mx-auto mt-4">
-                A collection of projects showcasing my work in film production, creative direction,
-                and cinematography.
-              </SectionSubtitle>
-            </motion.div>
-          </SectionHeader>
+    <div className="frame pb-24 pt-28 sm:pb-32 sm:pt-36">
+      <div className="flex flex-col gap-8 border-b border-line pb-6 lg:flex-row lg:items-end lg:justify-between">
+        <h1 className="title-card text-[clamp(4.5rem,14vw,12rem)]">Work</h1>
 
-          {/* Category Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-12 flex flex-wrap justify-center gap-3"
-          >
-            {portfolioCategories.map((category) => (
+        <div role="group" aria-label="Filter by role" className="flex flex-wrap gap-x-6 gap-y-2">
+          {roles.map((r) => {
+            const count = r === ALL ? films.length : films.filter((f) => f.role === r).length
+            return (
               <button
-                key={category.value}
-                onClick={() => setActiveCategory(category.value)}
+                key={r}
+                type="button"
+                aria-pressed={role === r}
+                onClick={() => setRole(r)}
                 className={cn(
-                  'rounded-xl px-6 py-2.5 text-sm font-medium transition-all duration-300',
-                  activeCategory === category.value
-                    ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                    : 'border border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+                  'py-1 transition-colors',
+                  role === r
+                    ? 'text-screen underline decoration-1 underline-offset-8'
+                    : 'text-mute hover:text-screen'
                 )}
               >
-                {category.name}
+                {r} <span className="tabular-nums text-mute">{count}</span>
               </button>
-            ))}
-          </motion.div>
+            )
+          })}
+        </div>
+      </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={staggerContainer}
-            className="mb-12 grid gap-4 sm:grid-cols-3"
-          >
-            {projectMetrics.map((metric) => (
-              <motion.div
-                key={metric.label}
-                variants={staggerItem}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="rounded-3xl border border-white/10 bg-white/5 px-6 py-5 text-center backdrop-blur-md"
-              >
-                <div className="text-sm uppercase tracking-[0.3em] text-white/50">{metric.label}</div>
-                <div className="text-3xl font-semibold text-white">{metric.value}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Work Grid */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              initial="hidden"
-              animate="visible"
-              exit={{ opacity: 0 }}
-              variants={staggerContainer}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+      <ul className="mt-12 grid gap-x-6 gap-y-14 md:grid-cols-2 lg:gap-x-10 lg:gap-y-20">
+        {visible.map((film) => (
+          <li key={film.id} id={film.id}>
+            <button
+              type="button"
+              onClick={() => setPlaying(film)}
+              className="group block w-full text-left"
             >
-              {filteredWork.map((item) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  className="h-full cursor-pointer"
-                  onClick={() => openModal(item)}
-                >
-                  <Card
-                    className="group h-full overflow-hidden border-white/5 bg-white/5 transition-colors hover:border-white/10 hover:bg-white/10"
-                    interactive
-                  >
-                    <div className="relative mb-4 overflow-hidden rounded-lg">
-                      <CardImage
-                        src={item.image}
-                        alt={item.title}
-                        aspectRatio="video"
-                        className="mb-0 transition-transform duration-700 group-hover:scale-110"
-                      />
-                      {/* Enhanced play overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover:opacity-100">
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          whileHover={{ scale: 1.15 }}
-                          transition={{ type: 'spring', stiffness: 300 }}
-                          className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 backdrop-blur-md"
-                        >
-                          <Play className="ml-1 h-8 w-8 fill-white text-white" />
-                        </motion.div>
-                      </div>
-                    </div>
+              <span className="relative block aspect-video overflow-hidden bg-booth">
+                <Image
+                  src={film.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 48vw, 100vw"
+                  className="object-cover opacity-85 transition duration-500 ease-cut group-hover:scale-[1.02] group-hover:opacity-100"
+                />
+                <span className="absolute bottom-4 left-4 bg-ink px-3 py-1 text-sm font-semibold opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                  Play
+                </span>
+              </span>
+              <span className="mt-5 grid grid-cols-[1fr_auto] items-baseline gap-x-6">
+                <span className="title-card text-4xl sm:text-5xl">{film.title}</span>
+                <span className="tabular-nums text-mute">{film.year}</span>
+              </span>
+              <span className="mt-2 block text-screen/80">
+                {film.role}
+                {film.subtitle && <span className="text-mute">, {film.subtitle}</span>}
+              </span>
+              <span className="mt-2 block max-w-measure text-mute">{film.description}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
 
-                    <CardContent>
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-accent-400">
-                          {item.category}
-                        </span>
-                        <span className="text-xs text-white/40">{item.year}</span>
-                      </div>
-                      <CardTitle className="mb-2 text-xl pb-1">{item.title}</CardTitle>
-                      <CardDescription className="line-clamp-2 text-sm pb-1">
-                        {item.description}
-                      </CardDescription>
-
-                      <div className="mt-4 flex items-center gap-2 text-xs font-medium text-white/40 transition-colors group-hover:text-primary-400">
-                        View Project <ArrowRight className="h-3 w-3" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Empty State */}
-          {filteredWork.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="py-20 text-center"
-            >
-              <p className="text-xl text-white/60">No projects found in this category.</p>
-            </motion.div>
-          )}
-        </Section>
-      </PageWrapper>
-
-      <VideoModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        project={selectedWork}
-      />
-    </>
+      <VideoModal film={playing} onClose={() => setPlaying(null)} />
+    </div>
   )
 }
