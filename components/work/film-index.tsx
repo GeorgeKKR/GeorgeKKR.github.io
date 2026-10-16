@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import type { Film } from '@/lib/content'
 import { VideoModal } from '@/components/ui/video-modal'
@@ -18,6 +18,33 @@ interface FilmIndexProps {
 export function FilmIndex({ films, heading }: FilmIndexProps) {
   const [activeId, setActiveId] = useState(films[0]?.id)
   const [playing, setPlaying] = useState<Film | null>(null)
+  const [isHovering, setIsHovering] = useState(false)
+  const previewRef = useRef<HTMLDivElement>(null)
+
+  // The preview trails the pointer with a little lag, like a handheld frame
+  useEffect(() => {
+    const preview = previewRef.current
+    if (!preview || !window.matchMedia('(hover: hover)').matches) return
+    const target = { x: 0, y: 0 }
+    const current = { x: 0, y: 0 }
+    let rafId = 0
+    const onMove = (e: PointerEvent) => {
+      target.x = e.clientX
+      target.y = e.clientY
+    }
+    const frame = () => {
+      current.x += (target.x - current.x) * 0.12
+      current.y += (target.y - current.y) * 0.12
+      preview.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`
+      rafId = requestAnimationFrame(frame)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    rafId = requestAnimationFrame(frame)
+    return () => {
+      window.removeEventListener('pointermove', onMove)
+      cancelAnimationFrame(rafId)
+    }
+  }, [])
   const active = films.find((film) => film.id === activeId) ?? films[0]
 
   return (
@@ -25,9 +52,25 @@ export function FilmIndex({ films, heading }: FilmIndexProps) {
       aria-label="Selected films"
       className="relative isolate flex min-h-[100svh] flex-col overflow-hidden"
     >
-      {/* Projected stills: the active one cross-fades in and slowly pushes in */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
-        <div data-parallax="0.35" className="absolute -inset-y-[12%] inset-x-0">
+      {/* Atmosphere: a soft projector beam drifting through film grain */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden bg-ink">
+        <div className="projector-beam absolute -inset-[20%]" />
+        <div className="film-grain absolute -inset-[50%]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#000_100%)]" />
+      </div>
+
+      {/* Still of the film you're on, trailing the pointer (hover devices) */}
+      <div
+        ref={previewRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-20 hidden [@media(hover:hover)]:md:block"
+      >
+        <div
+          className={cn(
+            'relative aspect-video w-[min(26vw,24rem)] -translate-y-1/2 translate-x-10 overflow-hidden bg-booth transition-[opacity,transform] duration-500 ease-cut',
+            isHovering ? 'scale-100 opacity-100' : 'scale-90 opacity-0'
+          )}
+        >
           {films.map((film, index) => (
             <Image
               key={film.id}
@@ -35,27 +78,31 @@ export function FilmIndex({ films, heading }: FilmIndexProps) {
               alt=""
               fill
               priority={index === 0}
-              sizes="100vw"
+              sizes="24rem"
               className={cn(
                 'object-cover transition-[opacity,transform] ease-cut',
                 film.id === active?.id
-                  ? 'scale-100 opacity-100 duration-[900ms,7000ms]'
-                  : 'scale-110 opacity-0 duration-[900ms,1200ms]'
+                  ? 'scale-100 opacity-100 duration-[500ms,5000ms]'
+                  : 'scale-110 opacity-0 duration-[500ms,800ms]'
               )}
             />
           ))}
+          <span className="absolute bottom-3 left-3 bg-ink px-2 py-0.5 text-sm font-semibold">
+            Play
+          </span>
         </div>
-        <div className="absolute inset-0 bg-ink/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/60" />
       </div>
 
-      <div className="frame flex flex-1 flex-col pb-10 pt-28 sm:pb-14 sm:pt-36">
+      <div className="frame relative z-10 flex flex-1 flex-col pb-10 pt-28 sm:pb-14 sm:pt-36">
         {heading}
 
         <ul
           className="mt-auto pt-16"
-          data-cursor="Play"
-          onMouseLeave={() => setActiveId(films[0]?.id)}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => {
+            setIsHovering(false)
+            setActiveId(films[0]?.id)
+          }}
         >
           {films.map((film, index) => {
             const isActive = film.id === active?.id
