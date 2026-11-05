@@ -306,6 +306,22 @@ html.lenis body {
   transform: scale(1.04);
 }
 
+/* Letterbox: a scope frame opens from the centre line while the footage settles */
+.motion [data-reveal='letterbox'] {
+  clip-path: inset(50% 0 50% 0);
+  transition: clip-path 1400ms var(--ease-shutter);
+}
+.motion [data-reveal='letterbox'] video {
+  transform: scale(1.15);
+  transition: transform 2200ms var(--ease-cut);
+}
+.motion [data-reveal='letterbox'][data-inview] {
+  clip-path: inset(0 0 0 0);
+}
+.motion [data-reveal='letterbox'][data-inview] video {
+  transform: none;
+}
+
 /* Fade: quiet rise for supporting copy */
 .motion [data-reveal='fade'] {
   opacity: 0;

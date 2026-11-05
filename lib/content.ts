@@ -113,6 +113,45 @@ export const onSetPhotos: OnSetPhoto[] = [
   },
 ]
 
+/** Behind-the-scenes clip that opens the home page's "Behind the camera" section */
+export const setClip = {
+  src: '/video/su-mano-slate.mp4',
+  poster: '/video/su-mano-slate.webp',
+  production: 'Su Mano',
+  // Read off the slate in the shot
+  detail: 'scene 12/5, take 1',
+  label:
+    'A crew member slates scene 12/5 of Su Mano in a sunlit plaza, claps the sticks and steps out of frame',
+}
+
+/** Unit stills from set, shown as a strip under the clip. Width ÷ height sets each frame's shape. */
+export const setStills: (OnSetPhoto & { ratio: number })[] = [
+  {
+    src: '/img/set/monitor-take.webp',
+    ratio: 3 / 2,
+    alt: 'A crew member in a black cap and earpiece watches a take of a guitarist on a SmallHD monitor',
+    caption: 'Watching the take on the monitor',
+  },
+  {
+    src: '/img/set/dolly-crew.webp',
+    ratio: 3 / 4,
+    alt: 'Crew gathered around a cinema camera with a matte box, mounted on a dolly in a tiled courtyard',
+    caption: 'Camera on the dolly between setups',
+  },
+  {
+    src: '/img/set/exterior-village.webp',
+    ratio: 3 / 4,
+    alt: 'Crew in hi-vis vests by a roadside monitor and director’s chairs under a bright blue sky',
+    caption: 'Video village on an exterior day',
+  },
+  {
+    src: '/img/set/monitor-seated.webp',
+    ratio: 2 / 3,
+    alt: 'A crew member in a black cap sits in a red director’s chair beside a monitor, watching the set',
+    caption: 'Waiting on the next setup',
+  },
+]
+
 /** Most recent first. The first film is the hero's default background. */
 export const films: Film[] = [
   {

@@ -3,6 +3,7 @@ import { TransitionLink as Link } from '@/components/motion/transition-link'
 import { SplitText } from '@/components/motion/split-text'
 import { FilmIndex } from '@/components/work/film-index'
 import { BillingBlock } from '@/components/work/billing-block'
+import { SetClip } from '@/components/work/set-clip'
 import {
   bio,
   contactConfig,
@@ -10,8 +11,9 @@ import {
   getCredits,
   getIndexFilms,
   intro,
-  onSetPhotos,
   philosophy,
+  setClip,
+  setStills,
 } from '@/lib/content'
 
 export default function HomePage() {
@@ -48,52 +50,70 @@ export default function HomePage() {
 
 function BehindTheCamera() {
   return (
-    <section aria-labelledby="behind-heading" className="frame py-24 sm:py-36">
-      <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-5 lg:pt-10">
-          <h2 id="behind-heading" data-reveal="rise" className="title-card text-6xl sm:text-8xl">
-            <SplitText text="Behind the camera" />
-          </h2>
-          <p data-reveal="fade" className="mt-8 max-w-measure text-lg text-screen/85">
+    <section aria-labelledby="behind-heading" className="py-24 sm:py-36">
+      <div className="frame">
+        <h2
+          id="behind-heading"
+          data-reveal="rise"
+          className="title-card text-[clamp(3.75rem,10vw,9.5rem)]"
+        >
+          <SplitText text="Behind the camera" />
+        </h2>
+      </div>
+
+      <div className="mt-10 sm:mt-14">
+        <SetClip {...setClip} />
+      </div>
+
+      <div className="frame mt-16 grid gap-10 sm:mt-24 lg:grid-cols-12 lg:gap-12">
+        <div className="lg:col-span-5">
+          <p data-reveal="fade" className="max-w-measure text-lg text-screen/85">
             {bio[0]}
           </p>
-          <blockquote
-            data-reveal="fade"
-            style={{ ['--delay' as string]: '150ms' }}
-            className="mt-10 max-w-measure border-l border-screen/40 pl-6 font-display text-[1.75rem] font-medium leading-tight"
-          >
-            {philosophy}
-          </blockquote>
-          <Link href="/about" className="text-link mt-10 inline-block">
+          <Link href="/about" className="text-link mt-8 inline-block">
             More about me
           </Link>
         </div>
+        <blockquote
+          data-reveal="fade"
+          style={{ ['--delay' as string]: '150ms' }}
+          className="max-w-measure border-l border-screen/40 pl-6 font-display text-[1.75rem] font-medium leading-tight sm:text-4xl lg:col-span-6 lg:col-start-7"
+        >
+          {philosophy}
+        </blockquote>
+      </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:col-span-6 lg:col-start-7">
-          {onSetPhotos.map((photo, index) => (
-            <figure
-              key={photo.src}
-              data-parallax={index === 1 ? '0.12' : undefined}
-              className={index === 1 ? 'mt-16 sm:mt-28' : undefined}
-            >
+      {/* Unit stills: one row at a shared height on desktop, a swipeable strip below that */}
+      <ul
+        tabIndex={0}
+        aria-label="Stills from set"
+        className="frame mt-20 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto [scrollbar-width:none] sm:mt-28 sm:scroll-px-8 sm:gap-6 lg:overflow-visible"
+      >
+        {setStills.map((still, index) => (
+          <li
+            key={still.src}
+            style={{ ['--ratio' as string]: still.ratio }}
+            className="group w-[calc(20rem*var(--ratio))] flex-none snap-start lg:w-auto lg:flex-[var(--ratio)_1_0%]"
+          >
+            <figure>
               <div
                 data-reveal="shutter"
-                style={{ ['--delay' as string]: `${index * 200}ms` }}
-                className="relative aspect-[3/4] overflow-hidden bg-booth"
+                style={{ ['--delay' as string]: `${index * 120}ms`, aspectRatio: still.ratio }}
+                className="relative overflow-hidden bg-booth"
               >
                 <Image
-                  src={photo.src}
-                  alt={photo.alt}
+                  src={still.src}
+                  alt={still.alt}
                   fill
-                  sizes="(min-width: 1024px) 24vw, 46vw"
+                  sizes="(min-width: 1024px) 34vw, 80vw"
                   className="object-cover"
                 />
               </div>
-              <figcaption className="mt-3 text-sm text-mute">{photo.caption}</figcaption>
+              <figcaption className="mt-3 text-sm text-mute">{still.caption}</figcaption>
             </figure>
-          ))}
-        </div>
-      </div>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }
