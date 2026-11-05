@@ -91,7 +91,7 @@ Total: ~4,500 lines of clean, organized code
 ### 🚀 Next Steps:
 
 1. **Customize Content** - Edit `lib/content.ts`
-2. **Add Your Images** - Replace `public/img/profile_headshot.webp`
+2. **Add Your Images** - Replace `public/img/george-kelly-portrait.webp`
 3. **Setup EmailJS** - Get credentials for contact form
 4. **Create Favicons** - Replace placeholder icons
 5. **Deploy** - Follow `DEPLOYMENT_CHECKLIST.md`

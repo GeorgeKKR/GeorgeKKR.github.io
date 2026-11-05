@@ -90,7 +90,8 @@ export const meta: Meta = {
     'New York',
   ],
   siteUrl: 'https://georgekkr.github.io',
-  image: '/img/profile_headshot.webp',
+  // Link previews (LinkedIn, iMessage, email): JPEG, since not every preview reads WebP
+  image: '/img/george-kelly-portrait.jpg',
 }
 
 export const intro =
@@ -105,8 +106,8 @@ export const philosophy =
   'I believe in the power of visual storytelling to connect, inspire, and transform. Every frame is an opportunity to capture authentic moments that resonate with audiences.'
 
 export const portrait = {
-  src: '/img/profile_headshot.webp',
-  alt: 'Portrait of George Kelly',
+  src: '/img/george-kelly-portrait.webp',
+  alt: 'George Kelly in a navy quarter-zip sweater in front of a brownstone stoop',
 }
 
 export const onSetPhotos: OnSetPhoto[] = [

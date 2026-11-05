@@ -36,7 +36,7 @@ Complete this checklist before deploying your portfolio to production.
 ### 2. Assets & Media 🖼️
 
 - [ ] **Replace Placeholder Images**
-  - [ ] Profile photo: `public/img/profile_headshot.webp`
+  - [ ] Profile photo: `public/img/george-kelly-portrait.webp`
   - [ ] Add any additional project images to `public/img/`
   - [ ] Optimize all images (WebP format, compressed)
 

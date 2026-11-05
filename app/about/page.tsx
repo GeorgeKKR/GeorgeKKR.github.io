@@ -18,7 +18,7 @@ export default function AboutPage() {
             <div
               data-reveal="shutter"
               style={{ ['--delay' as string]: '250ms' }}
-              className="relative aspect-[3/4] max-w-sm overflow-hidden bg-booth"
+              className="relative aspect-[4/5] max-w-sm overflow-hidden bg-booth"
             >
               <Image
                 src={portrait.src}

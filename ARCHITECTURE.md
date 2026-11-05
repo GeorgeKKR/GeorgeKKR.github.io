@@ -436,7 +436,7 @@ npm run deploy       # Deploy to gh-pages branch
 ## Common Tasks
 
 ### Update Profile Image
-Replace `public/img/profile_headshot.webp`
+Replace `public/img/george-kelly-portrait.webp`
 
 ### Add New Project
 Update `portfolioItems` array in `lib/content.ts`
