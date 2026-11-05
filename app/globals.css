@@ -97,7 +97,9 @@
 /* ============================================================================
    MOTION
    Hidden "before" states only apply under html.motion, which an inline
-   script adds when reduced motion is off, so content never depends on JS.
+   script adds when reduced motion is off. Text on screen at load rises by
+   CSS alone (.rise-now); scroll reveals wait for MotionProvider, and the
+   inline script reveals them all if it hasn't started within 2s.
    ============================================================================ */
 
 :root {
@@ -252,6 +254,8 @@ html.lenis body {
 .rise-mask {
   display: inline-block;
   overflow: hidden;
+  /* Each mask holds one word: never break it between letters */
+  white-space: nowrap;
   /* Room for the glyphs' overshoot inside the tight title line-height */
   padding: 0.08em 0.02em 0.04em;
   margin: -0.08em -0.02em -0.04em;
@@ -263,10 +267,22 @@ html.lenis body {
 .motion [data-reveal='rise'] .rise-unit {
   transform: translateY(110%);
   transition: transform 900ms var(--ease-cut);
-  transition-delay: calc(var(--delay, 0ms) + var(--i, 0) * 28ms);
+  transition-delay: calc(var(--delay, 0ms) + var(--i, 0) * var(--rise-step, 28ms));
 }
 .motion [data-reveal='rise'][data-inview] .rise-unit {
   transform: none;
+}
+
+/* Rise now: the same rise for text that's on screen when the page opens.
+   CSS plays it as soon as the page paints, so it never waits on JavaScript */
+@keyframes rise-unit-in {
+  from {
+    transform: translateY(110%);
+  }
+}
+.motion .rise-now .rise-unit {
+  animation: rise-unit-in 600ms var(--ease-cut) both;
+  animation-delay: calc(var(--delay, 0ms) + var(--i, 0) * var(--rise-step, 28ms));
 }
 
 /* Focus pull: blurred and soft until it lands, staggered by --i */

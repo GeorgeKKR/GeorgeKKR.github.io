@@ -66,8 +66,18 @@ export const viewport: Viewport = {
   themeColor: '#000000',
 }
 
-// Motion is opt-in: hidden "before" states only exist once this class is set
-const enableMotionScript = `if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('motion')`
+// Motion is opt-in: hidden "before" states only exist once this class is set.
+// Scroll reveals stay hidden until MotionProvider marks them in view, so if it
+// hasn't started 2s in (slow or failed JavaScript), reveal everything instead.
+// The check runs again once the HTML has parsed, in case that takes longer.
+const enableMotionScript = `(function(){
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+document.documentElement.classList.add('motion');
+var due=false;
+function revealAll(){if(window.__motionReady)return;document.querySelectorAll('[data-reveal]').forEach(function(el){el.setAttribute('data-inview','')})}
+setTimeout(function(){due=true;revealAll()},2000);
+document.addEventListener('DOMContentLoaded',function(){if(due)revealAll()});
+})()`
 
 // ============================================================================
 // ROOT LAYOUT

@@ -24,11 +24,11 @@ export default function HomePage() {
         heading={
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <h1
-              data-reveal="rise"
-              className="max-w-[22ch] text-[1.625rem] font-medium leading-[1.2] sm:text-4xl"
+              style={{ ['--rise-step' as string]: '7ms' }}
+              className="rise-now max-w-[22ch] text-[1.625rem] font-medium leading-[1.2] sm:text-4xl"
             >
               <span className="sr-only">George Kelly. </span>
-              <SplitText text={intro} by="word" delay={150} />
+              <SplitText text={intro} by="word" delay={40} />
             </h1>
             <Link
               href="/work"
@@ -150,7 +150,8 @@ function ContactPrompt() {
       <a
         href={`mailto:${contactConfig.email}`}
         data-reveal="rise"
-        className="title-card mt-8 block text-[clamp(2.5rem,9.5vw,9.5rem)] normal-case transition-opacity [overflow-wrap:anywhere] hover:opacity-70"
+        // Sized to the column so the address always fits on one line (it renders at ~8.6x its font size)
+        className="title-card mt-8 block text-[clamp(1.5rem,calc((100vw_-_2rem)/9.8),9.5rem)] normal-case transition-opacity hover:opacity-70"
       >
         <SplitText text={contactConfig.email} delay={200} />
       </a>

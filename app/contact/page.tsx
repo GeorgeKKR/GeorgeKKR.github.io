@@ -36,8 +36,8 @@ type ContactFormData = z.infer<typeof contactFormSchema>
 export default function ContactPage() {
   return (
     <div className="frame pb-24 pt-28 sm:pb-32 sm:pt-36">
-      <h1 data-reveal="rise" className="title-card text-[clamp(4.5rem,14vw,12rem)]">
-        <SplitText text="Contact" delay={200} />
+      <h1 className="rise-now title-card text-[clamp(4.5rem,14vw,12rem)]">
+        <SplitText text="Contact" delay={120} />
       </h1>
 
       <div className="relative mt-12 grid gap-16 pt-12 lg:grid-cols-12 lg:gap-12">

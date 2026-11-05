@@ -8,6 +8,8 @@ import { CursorLabel } from '@/components/motion/cursor-label'
 declare global {
   interface Window {
     __lenis?: Lenis
+    /** Set once scroll reveals are wired up; the safety net in layout.tsx checks it */
+    __motionReady?: boolean
   }
 }
 
@@ -67,6 +69,7 @@ export function MotionProvider() {
     observeAll()
     const mutations = new MutationObserver(observeAll)
     mutations.observe(document.body, { childList: true, subtree: true })
+    window.__motionReady = true
 
     return () => {
       cancelAnimationFrame(rafId)
@@ -74,6 +77,7 @@ export function MotionProvider() {
       mutations.disconnect()
       lenis.destroy()
       window.__lenis = undefined
+      window.__motionReady = false
     }
   }, [])
 

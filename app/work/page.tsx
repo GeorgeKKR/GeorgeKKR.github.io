@@ -27,9 +27,10 @@ export default function WorkPage() {
 
   return (
     <div className="frame pb-24 pt-28 sm:pb-32 sm:pt-36">
-      <div className="relative flex flex-col gap-8 pb-6 lg:flex-row lg:items-end lg:justify-between">
-        <h1 data-reveal="rise" className="title-card text-[clamp(4.5rem,14vw,12rem)]">
-          <SplitText text="Work" delay={200} />
+      {/* Title and filters share a row only when both fit; otherwise the filters drop below */}
+      <div className="relative flex flex-col gap-8 pb-6 lg:flex-row lg:flex-wrap lg:items-end lg:justify-between lg:gap-x-12">
+        <h1 className="rise-now title-card text-[clamp(4.5rem,14vw,12rem)]">
+          <SplitText text="Work" delay={120} />
         </h1>
         <span
           aria-hidden="true"

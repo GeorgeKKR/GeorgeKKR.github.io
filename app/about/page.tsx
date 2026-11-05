@@ -32,8 +32,8 @@ export default function AboutPage() {
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6">
-          <h1 data-reveal="rise" className="title-card text-[clamp(4.5rem,14vw,12rem)]">
-            <SplitText text="About" delay={200} />
+          <h1 className="rise-now title-card text-[clamp(4.5rem,14vw,12rem)]">
+            <SplitText text="About" delay={120} />
           </h1>
           <div
             data-reveal="fade"
