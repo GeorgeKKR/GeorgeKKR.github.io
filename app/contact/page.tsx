@@ -5,6 +5,7 @@ import { useForm, type UseFormRegisterReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { SplitText } from '@/components/motion/split-text'
+import { ProfileLinks } from '@/components/ui/profile-links'
 import { contactConfig } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
@@ -63,6 +64,7 @@ export default function ContactPage() {
             {contactConfig.email}
           </a>
           <p className="mt-10 text-mute">Based in New York</p>
+          <ProfileLinks className="mt-6" />
         </div>
 
         <div

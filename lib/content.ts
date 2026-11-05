@@ -31,9 +31,11 @@ export interface Film {
 export interface Job {
   role: string
   company: string
+  /** Name used in the credits block when it differs from the company line */
+  creditName?: string
   location?: string
   period: string
-  description: string
+  description?: string
 }
 
 export interface Education {
@@ -60,8 +62,9 @@ export interface ContactConfig {
 }
 
 export interface SocialLinks {
-  instagram?: string
   linkedin?: string
+  imdb?: string
+  instagram?: string
   youtube?: string
   vimeo?: string
 }
@@ -94,7 +97,7 @@ export const intro =
   'Production assistant and filmmaker in New York. AD department, camera and edit, in English and Spanish.'
 
 export const bio = [
-  'I studied Film Studies at Queen Mary University of London and have worked on both sides of the camera since. I have run shoot and edit schedules in Los Angeles, led creative for a consumer brand in London, and directed, produced and shot music videos, podcasts and short films. Most recently, I was 3rd AD on Su Mano, a 2025 feature film.',
+  'I studied Film Studies at Queen Mary University of London and have worked on both sides of the camera since. I have run shoot and edit schedules in Los Angeles, led creative for a consumer brand in London, and directed, produced and shot music videos, podcasts and short films. Most recently, I was 3rd AD on Su Mano, a feature film shot in the Dominican Republic in 2025.',
   'I grew up speaking Spanish and did a documentary program in Sevilla, so I am comfortable working with crews and contributors in either language.',
 ]
 
@@ -182,7 +185,7 @@ export const films: Film[] = [
     role: '3rd Assistant Director',
     year: '2025',
     // Director's name is read off the slate in the set footage
-    description: 'A feature film directed by Angela Medina.',
+    description: 'A feature film directed by Angela Medina, shot in the Dominican Republic.',
     // A frame from set, the same one the clip opens on
     image: setClip.poster,
     clip: { src: setClip.src, srcSmall: setClip.srcSmall },
@@ -221,10 +224,10 @@ export const films: Film[] = [
   {
     id: 'ready-set-startup',
     title: 'Ready Set StartUP UK',
-    subtitle: 'Season 1 trailer',
-    role: 'Assistant Director',
+    subtitle: 'TV series',
+    role: '1st Assistant Director',
     year: '2021',
-    description: 'Official trailer for the first season of Ready Set StartUP UK.',
+    description: 'Official trailer for the first season of the series.',
     image: 'https://i.ytimg.com/vi/FI2K2rkOWQM/maxresdefault.jpg',
     videoUrl: 'https://www.youtube.com/watch?v=FI2K2rkOWQM',
   },
@@ -287,9 +290,12 @@ export const indexFilmIds = [
 export const jobs: Job[] = [
   {
     role: '3rd Assistant Director',
-    company: 'Su Mano',
-    period: '2025',
-    description: 'Feature film directed by Angela Medina. Worked on set with the 1st and 2nd ADs.',
+    company: 'Su Mano, feature film',
+    creditName: 'Su Mano',
+    location: 'Dominican Republic',
+    period: 'July 2025',
+    description:
+      'Managed crowd control, background-artist logistics, holding and sign-in, and set discipline. Worked on walkie with the AD department; held lock-ups on exterior locations. Supported the 1st and 2nd ADs running the floor and keeping production on schedule. Communicated with cast, background and local crew in Spanish and English.',
   },
   {
     role: 'Production Manager',
@@ -308,6 +314,13 @@ export const jobs: Job[] = [
       'Led content production from brief to delivery, including writing content briefs and drawing storyboards.',
   },
   {
+    role: '1st Assistant Director',
+    company: 'Ready Set StartUP UK, TV series',
+    creditName: 'Ready Set StartUP UK',
+    location: 'UK',
+    period: '2021',
+  },
+  {
     role: 'Assistant Director / Story Producer',
     company: 'Pictures in Motion',
     location: 'London, UK',
@@ -315,29 +328,30 @@ export const jobs: Job[] = [
     description: 'Helped with camera setup and rigging, and conducted master interviews on set.',
   },
   {
-    role: 'Film Intern',
+    role: 'Film Production Intern / Runner',
     company: 'Chocolate Films',
     location: 'London, UK',
     period: '2019–2020',
-    description: 'Supported filming and made social media content.',
-  },
-  {
-    role: 'Training',
-    company: 'Channel 4',
-    location: 'London, UK',
-    period: '2019',
     description:
-      'Research, writing and pitching, with an introduction to TV production and commissioning.',
+      'Assisted with camera operation and rigging/de-rigging on shoots. Supported short-film workshops and filming.',
   },
 ]
 
 export const education: Education[] = [
   {
-    degree: 'BA Film Studies',
+    degree: 'B.A. Film Studies',
     institution: 'Queen Mary University of London',
     location: 'London, UK',
     period: '2020–2023',
     description: 'Film theory, history and production techniques.',
+  },
+  {
+    degree: 'Television Production & Commissioning Training',
+    institution: 'Channel 4',
+    location: 'London, UK',
+    period: '2019',
+    description:
+      'Research, writing and pitching, with an introduction to TV production and commissioning. Scored 5/5 on the production module.',
   },
   {
     degree: 'Digital Filmmaking & Documentary',
@@ -350,11 +364,22 @@ export const education: Education[] = [
 ]
 
 export const skills = [
-  'Adobe Creative Suite',
+  'Set operations',
+  'Crowd and background logistics',
+  'Holding and sign-in',
+  'Walkie',
+  'Lock-ups',
+  'Call-sheet distribution',
+  'Scheduling',
+  'Equipment management',
+  'Camera setup, including gimbals',
+  'Rigging and de-rigging',
+  'Interview filming',
   'Video production and editing',
+  'Adobe Creative Suite',
   'Production management',
   'Storyboarding',
-  'Spanish (native)',
+  'Native English and Spanish',
 ]
 
 export const contactConfig: ContactConfig = {
@@ -364,8 +389,19 @@ export const contactConfig: ContactConfig = {
   userId: 'SYxCBvOHFeAdfu_L_',
 }
 
-/** Add real profile URLs here; links only render when set. */
-export const socialLinks: SocialLinks = {}
+const profileLabels: Record<keyof SocialLinks, string> = {
+  linkedin: 'LinkedIn',
+  imdb: 'IMDb',
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  vimeo: 'Vimeo',
+}
+
+/** Profile links; each renders only when set. */
+export const socialLinks: SocialLinks = {
+  linkedin: 'https://www.linkedin.com/in/georgekelly2',
+  imdb: 'https://www.imdb.com/name/nm15190358/',
+}
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -387,6 +423,14 @@ export function getWatchCue(film: Film): { cue: string; action: string } {
     : { cue: 'On set', action: `Watch footage from the set of ${film.title}` }
 }
 
+/** Profiles that are set, labeled, in display order */
+export function getProfiles(): { key: keyof SocialLinks; label: string; url: string }[] {
+  return (Object.keys(profileLabels) as (keyof SocialLinks)[]).flatMap((key) => {
+    const url = socialLinks[key]
+    return url ? [{ key, label: profileLabels[key], url }] : []
+  })
+}
+
 /** Unique roles in the order they first appear */
 export function getFilmRoles(): string[] {
   return Array.from(new Set(films.map((film) => film.role)))
@@ -404,8 +448,8 @@ export function getCredits(): { role: string; names: string[] }[] {
     filmCredits.flatMap((credit) => credit.names.map((name) => `${credit.role}|${name}`))
   )
   const jobCredits = jobs
-    .filter((job) => !filmCredited.has(`${job.role}|${job.company}`))
-    .map((job) => ({ role: job.role, names: [job.company] }))
+    .filter((job) => !filmCredited.has(`${job.role}|${job.creditName ?? job.company}`))
+    .map((job) => ({ role: job.role, names: [job.creditName ?? job.company] }))
   const studyCredits = education.map((ed) => ({
     role: ed.degree,
     names: [ed.creditName ?? ed.institution],

@@ -4,6 +4,7 @@ import { SplitText } from '@/components/motion/split-text'
 import { FilmIndex } from '@/components/work/film-index'
 import { BillingBlock } from '@/components/work/billing-block'
 import { SetClip } from '@/components/work/set-clip'
+import { ExternalLink } from '@/components/ui/external-link'
 import {
   bio,
   contactConfig,
@@ -14,6 +15,7 @@ import {
   philosophy,
   setClip,
   setStills,
+  socialLinks,
 } from '@/lib/content'
 
 export default function HomePage() {
@@ -126,9 +128,16 @@ function Credits() {
           <h2 id="credits-heading" className="text-lg font-semibold">
             Credits
           </h2>
-          <Link href="/about" className="text-link text-smoke hover:text-ink">
-            Full CV
-          </Link>
+          <div className="flex items-baseline gap-6">
+            {socialLinks.imdb && (
+              <ExternalLink href={socialLinks.imdb} className="text-link text-smoke hover:text-ink">
+                IMDb
+              </ExternalLink>
+            )}
+            <Link href="/about" className="text-link text-smoke hover:text-ink">
+              Full CV
+            </Link>
+          </div>
           <span
             aria-hidden="true"
             data-reveal="wipe"

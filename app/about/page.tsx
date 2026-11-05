@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { TransitionLink as Link } from '@/components/motion/transition-link'
 import { SplitText } from '@/components/motion/split-text'
+import { ProfileLinks } from '@/components/ui/profile-links'
 import { bio, education, jobs, onSetPhotos, philosophy, portrait, skills } from '@/lib/content'
 
 export const metadata: Metadata = {
@@ -33,7 +34,7 @@ export default function AboutPage() {
 
         <div className="lg:col-span-7 lg:col-start-6">
           <h1 className="rise-now title-card text-[clamp(4.5rem,14vw,12rem)]">
-            <SplitText text="About" delay={120} />
+            <SplitText text="George Kelly" delay={120} />
           </h1>
           <div
             data-reveal="fade"
@@ -51,7 +52,10 @@ export default function AboutPage() {
             {philosophy}
           </blockquote>
 
-          <CvList title="Experience">
+          <CvList
+            title="Experience"
+            aside={<ProfileLinks linkClassName="text-mute hover:text-screen" />}
+          >
             {jobs.map((job) => (
               <CvRow
                 key={job.company}
@@ -63,7 +67,7 @@ export default function AboutPage() {
             ))}
           </CvList>
 
-          <CvList title="Education">
+          <CvList title="Education and training">
             {education.map((ed) => (
               <CvRow
                 key={ed.institution}
@@ -119,18 +123,31 @@ export default function AboutPage() {
   )
 }
 
-function CvList({ title, children }: { title: string; children: React.ReactNode }) {
-  const id = `${title.toLowerCase()}-heading`
+function CvList({
+  title,
+  aside,
+  children,
+}: {
+  title: string
+  /** Links shown at the right end of the heading row */
+  aside?: React.ReactNode
+  children: React.ReactNode
+}) {
+  // An id can't contain spaces, or aria-labelledby reads it as several ids
+  const id = `${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-heading`
   return (
     <section aria-labelledby={id} className="mt-20">
-      <h2 id={id} className="relative pb-3 text-lg font-semibold">
-        {title}
+      <div className="relative flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pb-3">
+        <h2 id={id} className="text-lg font-semibold">
+          {title}
+        </h2>
+        {aside}
         <span
           aria-hidden="true"
           data-reveal="wipe"
           className="absolute inset-x-0 bottom-0 h-px bg-line"
         />
-      </h2>
+      </div>
       <ol>{children}</ol>
     </section>
   )
@@ -145,7 +162,7 @@ function CvRow({
   period: string
   heading: string
   place: string
-  text: string
+  text?: string
 }) {
   return (
     <li
@@ -156,7 +173,7 @@ function CvRow({
       <div>
         <h3 className="title-card text-3xl sm:text-4xl">{heading}</h3>
         <p className="mt-2 text-screen/85">{place}</p>
-        <p className="mt-2 max-w-measure text-mute">{text}</p>
+        {text && <p className="mt-2 max-w-measure text-mute">{text}</p>}
       </div>
     </li>
   )

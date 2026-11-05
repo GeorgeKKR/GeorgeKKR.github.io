@@ -1,16 +1,8 @@
 import { TransitionLink as Link } from '@/components/motion/transition-link'
-import { contactConfig, socialLinks } from '@/lib/content'
-
-const socialLabels: Record<string, string> = {
-  instagram: 'Instagram',
-  linkedin: 'LinkedIn',
-  youtube: 'YouTube',
-  vimeo: 'Vimeo',
-}
+import { ExternalLink } from '@/components/ui/external-link'
+import { contactConfig, getProfiles } from '@/lib/content'
 
 export function Footer() {
-  const socials = Object.entries(socialLinks).filter(([, url]) => Boolean(url))
-
   return (
     <footer className="border-t border-line">
       <div className="frame flex flex-col gap-6 py-10 text-mute sm:flex-row sm:items-center sm:justify-between">
@@ -21,11 +13,11 @@ export function Footer() {
               Email
             </a>
           </li>
-          {socials.map(([key, url]) => (
-            <li key={key}>
-              <a href={url} target="_blank" rel="noopener noreferrer" className="hover:text-screen">
-                {socialLabels[key] ?? key}
-              </a>
+          {getProfiles().map((profile) => (
+            <li key={profile.key}>
+              <ExternalLink href={profile.url} className="hover:text-screen">
+                {profile.label}
+              </ExternalLink>
             </li>
           ))}
           <li>
