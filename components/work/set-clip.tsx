@@ -2,24 +2,37 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+interface Setup {
+  /** Seconds into the clip where this setup ends */
+  until: number
+  /** Slate details, e.g. "scene 12/5, take 1" */
+  detail: string
+  /** Horizontal framing when the band is cropped to 4:3 on phones */
+  focus: string
+}
+
 interface SetClipProps {
   src: string
+  /** Lighter file for screens narrower than 1024px */
+  srcSmall: string
   poster: string
   production: string
-  detail: string
   label: string
+  setups: Setup[]
 }
 
 /**
  * A full-bleed, scope-shaped band of behind-the-scenes footage. The
  * letterbox opens as it scrolls in and the clip plays, muted and looping,
- * only while it's on screen. With reduced motion it waits on its poster
- * frame until the visitor presses Play.
+ * only while it's on screen. The caption and phone framing follow whichever
+ * setup is playing. With reduced motion it waits on its poster frame until
+ * the visitor presses Play.
  */
-export function SetClip({ src, poster, production, detail, label }: SetClipProps) {
+export function SetClip({ src, srcSmall, poster, production, label, setups }: SetClipProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const bandRef = useRef<HTMLDivElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [setupIndex, setSetupIndex] = useState(0)
   // Once the visitor pauses (or never had autoplay), scrolling won't restart it
   const heldByVisitor = useRef(false)
 
@@ -29,10 +42,13 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
     if (!video || !band) return
     if (!document.documentElement.classList.contains('motion')) heldByVisitor.current = true
 
-    // Start fetching a little before it arrives
+    // Pick a file for this screen and start fetching a little before it arrives
     const preload = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
+        if (!video.getAttribute('src')) {
+          video.src = window.matchMedia('(min-width: 1024px)').matches ? src : srcSmall
+        }
         video.preload = 'auto'
         preload.disconnect()
       },
@@ -52,11 +68,12 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
       preload.disconnect()
       playback.disconnect()
     }
-  }, [])
+  }, [src, srcSmall])
 
   const toggle = () => {
     const video = videoRef.current
     if (!video) return
+    if (!video.getAttribute('src')) video.src = srcSmall
     if (video.paused) {
       heldByVisitor.current = false
       video.play().catch(() => {})
@@ -65,6 +82,15 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
       video.pause()
     }
   }
+
+  // Setups change during a dip to black, so the caption and reframe land unseen
+  const onTimeUpdate = () => {
+    const time = videoRef.current?.currentTime ?? 0
+    const index = setups.findIndex((setup) => time < setup.until)
+    setSetupIndex(index === -1 ? setups.length - 1 : index)
+  }
+
+  const setup = setups[setupIndex] ?? setups[0]
 
   return (
     <figure>
@@ -75,7 +101,6 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
       >
         <video
           ref={videoRef}
-          src={src}
           poster={poster}
           aria-label={label}
           muted
@@ -84,7 +109,9 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
           preload="none"
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
-          className="absolute inset-0 h-full w-full object-cover object-[62%_50%] sm:object-center"
+          onTimeUpdate={onTimeUpdate}
+          style={{ ['--focus' as string]: setup?.focus ?? '50%' }}
+          className="absolute inset-0 h-full w-full object-cover object-[var(--focus)_50%] sm:object-center"
         />
         <span aria-hidden="true" className="film-grain absolute -inset-[50%]" />
         <span
@@ -93,9 +120,9 @@ export function SetClip({ src, poster, production, detail, label }: SetClipProps
         />
       </div>
       <figcaption className="frame mt-4 flex items-baseline justify-between gap-6">
-        <span>
+        <span key={setup?.detail} className="credit-in">
           {production}
-          <span className="text-mute">, {detail}</span>
+          <span className="text-mute">, {setup?.detail}</span>
         </span>
         {/* WCAG 2.2.2: anything that moves on its own can be paused */}
         <button

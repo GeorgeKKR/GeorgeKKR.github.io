@@ -113,15 +113,30 @@ export const onSetPhotos: OnSetPhoto[] = [
   },
 ]
 
-/** Behind-the-scenes clip that opens the home page's "Behind the camera" section */
+/**
+ * Behind-the-scenes clip that opens the home page's "Behind the camera"
+ * section: three setups from scene 12 of Su Mano, cut into one loop. It opens
+ * on 12/5 (the clap) and loops on to 12/3 and 12/4, so it always plays in
+ * scene order.
+ */
 export const setClip = {
-  src: '/video/su-mano-slate.mp4',
-  poster: '/video/su-mano-slate.webp',
+  src: '/video/su-mano-scene-12.mp4',
+  // Lighter cut for screens narrower than 1024px
+  srcSmall: '/video/su-mano-scene-12-720.mp4',
+  poster: '/video/su-mano-scene-12.webp',
   production: 'Su Mano',
-  // Read off the slate in the shot
-  detail: 'scene 12/5, take 1',
   label:
-    'A crew member slates scene 12/5 of Su Mano in a sunlit plaza, claps the sticks and steps out of frame',
+    'Behind the scenes on Su Mano: scenes 12/5, 12/3 and 12/4 are slated on location in sunlit plazas',
+  /**
+   * Each setup ends `until` seconds into the clip. `focus` is the horizontal
+   * framing on phones, where the band is cropped to 4:3. Details are read
+   * off the slate in each shot.
+   */
+  setups: [
+    { until: 8.2, detail: 'scene 12/5, take 1', focus: '62%' },
+    { until: 14.7, detail: 'scene 12/3, take 1', focus: '0%' },
+    { until: Infinity, detail: 'scene 12/4, take 2', focus: '0%' },
+  ],
 }
 
 /** Unit stills from set, shown as a strip under the clip. Width ÷ height sets each frame's shape. */
