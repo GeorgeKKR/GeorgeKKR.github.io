@@ -57,7 +57,7 @@ export default function AboutPage() {
                 key={job.company}
                 period={job.period}
                 heading={job.role}
-                place={`${job.company}, ${job.location}`}
+                place={[job.company, job.location].filter(Boolean).join(', ')}
                 text={job.description}
               />
             ))}

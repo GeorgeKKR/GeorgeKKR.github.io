@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom'
 import Image from 'next/image'
 import { SplitText } from '@/components/motion/split-text'
 import { VideoModal } from '@/components/ui/video-modal'
-import { films, getFilmRoles, type Film } from '@/lib/content'
+import { films, getFilmRoles, getWatchCue, type Film } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
 const ALL = 'All'
@@ -72,7 +72,7 @@ export default function WorkPage() {
           <li key={film.id} id={film.id} style={{ viewTransitionName: `film-${film.id}` }}>
             <button
               type="button"
-              data-cursor="Play"
+              data-cursor={getWatchCue(film).cue}
               onClick={() => setPlaying(film)}
               className="group block w-full text-left"
             >
@@ -88,7 +88,7 @@ export default function WorkPage() {
                   className="object-cover opacity-85 transition-opacity duration-500 ease-cut group-hover:opacity-100"
                 />
                 <span className="absolute bottom-4 left-4 bg-ink px-3 py-1 text-sm font-semibold opacity-0 transition-opacity group-focus-visible:opacity-100">
-                  Play
+                  {getWatchCue(film).cue}
                 </span>
               </span>
               <span className="mt-5 grid grid-cols-[1fr_auto] items-baseline gap-x-6">

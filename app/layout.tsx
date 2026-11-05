@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'en_GB',
+    locale: 'en_US',
     url: meta.siteUrl,
     title: meta.title,
     description: meta.description,
@@ -77,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     // The inline script adds a class to <html> before paint, so suppress the mismatch
     <html
-      lang="en-GB"
+      lang="en-US"
       className={`${sofiaSans.variable} ${sofiaCondensed.variable}`}
       suppressHydrationWarning
     >

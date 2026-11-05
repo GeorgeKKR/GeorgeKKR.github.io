@@ -145,7 +145,7 @@ function ContactPrompt() {
   return (
     <section aria-labelledby="contact-heading" className="frame py-24 sm:py-36">
       <h2 id="contact-heading" data-reveal="fade" className="text-2xl font-medium sm:text-3xl">
-        Have a project that needs a producer, director or camera operator?
+        Crewing up in New York? I’m looking for PA and AD department work.
       </h2>
       <a
         href={`mailto:${contactConfig.email}`}

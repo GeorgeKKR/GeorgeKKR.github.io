@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import type { Film } from '@/lib/content'
+import { getWatchCue, type Film } from '@/lib/content'
 import { VideoModal } from '@/components/ui/video-modal'
 import { cn } from '@/lib/utils'
 
@@ -91,9 +91,9 @@ export function FilmIndex({ films, heading }: FilmIndexProps) {
           <div className="credit-in lg:order-2 lg:col-span-5" style={{ animationDelay: '300ms' }}>
             <button
               type="button"
-              data-cursor="Play"
+              data-cursor={getWatchCue(active).cue}
               onClick={() => setPlaying(active)}
-              aria-label={`Play ${active.title}${active.subtitle ? `, ${active.subtitle}` : ''}`}
+              aria-label={getWatchCue(active).action}
               className="group relative block aspect-video w-full overflow-hidden bg-booth"
             >
               {films.map((film, index) => (
@@ -121,7 +121,7 @@ export function FilmIndex({ films, heading }: FilmIndexProps) {
               {/* Viewfinder frame lines */}
               <span aria-hidden="true" className="viewfinder absolute inset-3 sm:inset-4" />
               <span className="absolute bottom-4 left-4 bg-ink px-3 py-1 text-sm font-semibold opacity-0 transition-opacity group-focus-visible:opacity-100 sm:bottom-5 sm:left-5">
-                Play
+                {getWatchCue(active).cue}
               </span>
             </button>
 
@@ -158,11 +158,11 @@ export function FilmIndex({ films, heading }: FilmIndexProps) {
                 >
                   <button
                     type="button"
-                    data-cursor="Play"
+                    data-cursor={getWatchCue(film).cue}
                     onMouseEnter={() => setActiveId(film.id)}
                     onFocus={() => setActiveId(film.id)}
                     onClick={() => setPlaying(film)}
-                    aria-label={`Play ${film.title}${film.subtitle ? `, ${film.subtitle}` : ''}`}
+                    aria-label={getWatchCue(film).action}
                     className="group relative grid w-full grid-cols-[1fr_auto] items-baseline gap-x-6 py-2.5 text-left sm:py-2"
                   >
                     {/* Under the current title: a timer while the reel rolls, a rule otherwise */}

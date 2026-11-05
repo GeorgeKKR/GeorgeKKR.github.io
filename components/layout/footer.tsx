@@ -14,7 +14,7 @@ export function Footer() {
   return (
     <footer className="border-t border-line">
       <div className="frame flex flex-col gap-6 py-10 text-mute sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} George Kelly, London</p>
+        <p>© {new Date().getFullYear()} George Kelly, New York</p>
         <ul className="flex flex-wrap gap-x-8 gap-y-2">
           <li>
             <a href={`mailto:${contactConfig.email}`} className="hover:text-screen">

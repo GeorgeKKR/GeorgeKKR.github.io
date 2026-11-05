@@ -62,7 +62,7 @@ export default function ContactPage() {
           >
             {contactConfig.email}
           </a>
-          <p className="mt-10 text-mute">Based in London, UK</p>
+          <p className="mt-10 text-mute">Based in New York</p>
         </div>
 
         <div

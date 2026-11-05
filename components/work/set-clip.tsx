@@ -42,7 +42,9 @@ export function SetClip({ src, srcSmall, poster, production, label, setups }: Se
     if (!video || !band) return
     if (!document.documentElement.classList.contains('motion')) heldByVisitor.current = true
 
-    // Pick a file for this screen and start fetching a little before it arrives
+    // Pick a file for this screen and start fetching just before it arrives. The
+    // margin stays small because the band sits right under the hero, and a
+    // bigger one would download the clip for visitors who never scroll.
     const preload = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
@@ -52,7 +54,7 @@ export function SetClip({ src, srcSmall, poster, production, label, setups }: Se
         video.preload = 'auto'
         preload.disconnect()
       },
-      { rootMargin: '600px 0px' }
+      { rootMargin: '150px 0px' }
     )
     // Play while at least a third is visible, pause otherwise
     const playback = new IntersectionObserver(

@@ -306,7 +306,7 @@ html.lenis body {
   transform: scale(1.04);
 }
 
-/* Letterbox: a scope frame opens from the centre line while the footage settles */
+/* Letterbox: a scope frame opens from the center line while the footage settles */
 .motion [data-reveal='letterbox'] {
   clip-path: inset(50% 0 50% 0);
   transition: clip-path 1400ms var(--ease-shutter);

@@ -22,13 +22,16 @@ export interface Film {
   /** Name used in the credits block when it differs from the title */
   creditName?: string
   image: string
-  videoUrl: string
+  /** YouTube link to the finished film */
+  videoUrl?: string
+  /** Footage from set, played instead when the film has no public link yet */
+  clip?: { src: string; srcSmall: string }
 }
 
 export interface Job {
   role: string
   company: string
-  location: string
+  location?: string
   period: string
   description: string
 }
@@ -68,28 +71,31 @@ export interface SocialLinks {
 // ============================================================================
 
 export const meta: Meta = {
-  title: 'George Kelly | Producer, Director & Camera Operator',
+  title: 'George Kelly | Production Assistant & Filmmaker, New York',
   description:
-    'George Kelly is a London-based producer, director and camera operator working across music videos, documentary series, podcasts, commercials and short film.',
+    'George Kelly is a production assistant and filmmaker in New York, working in the AD department, camera and edit, in English and Spanish.',
   author: 'George Kelly',
   keywords: [
-    'film producer',
-    'director',
-    'camera operator',
-    'creative director',
-    'production manager',
-    'London',
+    'production assistant',
+    'assistant director',
+    'AD department',
+    'bilingual',
+    'Spanish',
+    'camera',
+    'editor',
+    'filmmaker',
+    'New York',
   ],
   siteUrl: 'https://georgekkr.github.io',
   image: '/img/profile_headshot.webp',
 }
 
 export const intro =
-  'Producer, director and camera operator based in London. I take projects from the first brief to the final cut.'
+  'Production assistant and filmmaker in New York. AD department, camera and edit, in English and Spanish.'
 
 export const bio = [
-  'I studied Film Studies at Queen Mary University of London and have worked on both sides of the camera since. I have run shoot and edit schedules in Los Angeles, led creative for a consumer brand in London, and directed, produced and shot music videos, podcasts and short films.',
-  'I grew up speaking Spanish and did a documentary programme in Sevilla, so I am comfortable working with crews and contributors in either language.',
+  'I studied Film Studies at Queen Mary University of London and have worked on both sides of the camera since. I have run shoot and edit schedules in Los Angeles, led creative for a consumer brand in London, and directed, produced and shot music videos, podcasts and short films. Most recently, I was 3rd AD on Su Mano, a 2025 feature film.',
+  'I grew up speaking Spanish and did a documentary program in Sevilla, so I am comfortable working with crews and contributors in either language.',
 ]
 
 export const philosophy =
@@ -169,6 +175,18 @@ export const setStills: (OnSetPhoto & { ratio: number })[] = [
 
 /** Most recent first. The first film is the hero's default background. */
 export const films: Film[] = [
+  {
+    id: 'su-mano',
+    title: 'Su Mano',
+    subtitle: 'Feature film',
+    role: '3rd Assistant Director',
+    year: '2025',
+    // Director's name is read off the slate in the set footage
+    description: 'A feature film directed by Angela Medina.',
+    // A frame from set, the same one the clip opens on
+    image: setClip.poster,
+    clip: { src: setClip.src, srcSmall: setClip.srcSmall },
+  },
   {
     id: 'zigzag',
     title: 'ZIGZAG',
@@ -250,7 +268,7 @@ export const films: Film[] = [
     role: 'Director of Photography',
     year: '2020',
     description:
-      'A short film about value and perception, told through a seemingly simple piece of jewellery.',
+      'A short film about value and perception, told through a seemingly simple piece of jewelry.',
     image: 'https://i.ytimg.com/vi/7VuJi3JSBjo/maxresdefault.jpg',
     videoUrl: 'https://www.youtube.com/watch?v=7VuJi3JSBjo',
   },
@@ -258,8 +276,8 @@ export const films: Film[] = [
 
 /** Films shown in the home page index */
 export const indexFilmIds = [
+  'su-mano',
   'zigzag',
-  'bisous',
   'nimble-commercial',
   'ready-set-startup',
   'purpose',
@@ -267,6 +285,12 @@ export const indexFilmIds = [
 ]
 
 export const jobs: Job[] = [
+  {
+    role: '3rd Assistant Director',
+    company: 'Su Mano',
+    period: '2025',
+    description: 'Feature film directed by Angela Medina. Worked on set with the 1st and 2nd ADs.',
+  },
   {
     role: 'Production Manager',
     company: 'Spectrum Labs',
@@ -276,7 +300,7 @@ export const jobs: Job[] = [
       'Ran filming and editing schedules so projects finished on time. Managed equipment checks and contributor attendance.',
   },
   {
-    role: 'Creative Director',
+    role: 'Intern, then Creative Director',
     company: 'Nimblebabies',
     location: 'London, UK',
     period: '2021–2022',
@@ -298,7 +322,7 @@ export const jobs: Job[] = [
     description: 'Supported filming and made social media content.',
   },
   {
-    role: 'Work Experience',
+    role: 'Training',
     company: 'Channel 4',
     location: 'London, UK',
     period: '2019',
@@ -334,7 +358,7 @@ export const skills = [
 ]
 
 export const contactConfig: ContactConfig = {
-  email: 'georgekelly00@icloud.com',
+  email: 'George1415352@gmail.com',
   serviceId: 'service_wnxzyoi',
   templateId: 'template_paft5r8',
   userId: 'SYxCBvOHFeAdfu_L_',
@@ -355,6 +379,14 @@ export function getIndexFilms(): Film[] {
   return indexFilmIds.map(getFilm).filter((film): film is Film => Boolean(film))
 }
 
+/** What selecting a film offers: the film itself, or footage from set when it has no public link */
+export function getWatchCue(film: Film): { cue: string; action: string } {
+  const name = film.subtitle ? `${film.title}, ${film.subtitle}` : film.title
+  return film.videoUrl
+    ? { cue: 'Play', action: `Play ${name}` }
+    : { cue: 'On set', action: `Watch footage from the set of ${film.title}` }
+}
+
 /** Unique roles in the order they first appear */
 export function getFilmRoles(): string[] {
   return Array.from(new Set(films.map((film) => film.role)))
@@ -368,7 +400,12 @@ export function getCredits(): { role: string; names: string[] }[] {
       new Set(films.filter((f) => f.role === role).map((f) => f.creditName ?? f.title))
     ),
   }))
-  const jobCredits = jobs.map((job) => ({ role: job.role, names: [job.company] }))
+  const filmCredited = new Set(
+    filmCredits.flatMap((credit) => credit.names.map((name) => `${credit.role}|${name}`))
+  )
+  const jobCredits = jobs
+    .filter((job) => !filmCredited.has(`${job.role}|${job.company}`))
+    .map((job) => ({ role: job.role, names: [job.company] }))
   const studyCredits = education.map((ed) => ({
     role: ed.degree,
     names: [ed.creditName ?? ed.institution],
