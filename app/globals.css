@@ -213,6 +213,41 @@ html.lenis body {
   animation: credit-in 800ms var(--ease-cut) both;
 }
 
+/* Hero reel: the rule under the current title fills as the film holds the
+   monitor; FilmIndex cuts to the next film when it finishes */
+@keyframes reel-timer {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.reel-timer {
+  animation: reel-timer var(--hold, 5000ms) linear both;
+}
+
+/* Viewfinder frame lines: four corner brackets inside the monitor */
+.viewfinder {
+  --arm: 1.25rem;
+  --edge: rgb(237 237 233 / 0.7);
+  background:
+    linear-gradient(var(--edge), var(--edge)) top left / var(--arm) 1px,
+    linear-gradient(var(--edge), var(--edge)) top left / 1px var(--arm),
+    linear-gradient(var(--edge), var(--edge)) top right / var(--arm) 1px,
+    linear-gradient(var(--edge), var(--edge)) top right / 1px var(--arm),
+    linear-gradient(var(--edge), var(--edge)) bottom left / var(--arm) 1px,
+    linear-gradient(var(--edge), var(--edge)) bottom left / 1px var(--arm),
+    linear-gradient(var(--edge), var(--edge)) bottom right / var(--arm) 1px,
+    linear-gradient(var(--edge), var(--edge)) bottom right / 1px var(--arm);
+  background-repeat: no-repeat;
+  transition: inset 600ms var(--ease-cut);
+}
+/* Pointing at the monitor pulls the frame lines in, like framing up a shot */
+.group:hover .viewfinder {
+  inset: 1.75rem;
+}
+
 /* Rise: letters climb out of a mask (see SplitText) */
 .rise-mask {
   display: inline-block;
